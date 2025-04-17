@@ -20,6 +20,7 @@ export default function Home() {
 
   const [isDisabled, setIsDisabled] = useState(true);
   const [fetchError, setFetchError] = useState(null);
+  const [defenition, setDefenition] = useState("");
 
   // Changing input content
   const handleInputChange = (e) => {
@@ -30,7 +31,6 @@ export default function Home() {
     }));
   };
 
-  // Submit check input
 
   const handleSubmitCheckInput = async (e) => {
     e.preventDefault();
@@ -45,8 +45,11 @@ export default function Home() {
         throw new Error("Network response was not ok");
       }
       const listWords = await response.json();
+      const wordDefenition = listWords[0].meanings[0].definitions[0].definition;
       console.log(listWords);
+      console.log(listWords[0].meanings[0].definitions[0].definition);
       setInputContent(listWords); 
+      setDefenition(wordDefenition)
       setFetchError(null); 
     } catch (error) {
       console.error("Error fetching word:", error);
@@ -115,6 +118,10 @@ export default function Home() {
         {/* <div>{inputContent.map((content) => (
           <d></d>
         ))}</div> */}
+        <div className="page_word_defenition">
+          <h3 className="page_defenitionHedline">Defenition:</h3>
+          <p>{fetchError || `The above word possible deffinition might be:${defenition}`}</p>
+        </div>
       </div>
     </div>
   );
