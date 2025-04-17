@@ -1,95 +1,121 @@
-import Image from "next/image";
-import styles from "./page.module.css";
+'use client';
+import { useState, useRef, useEffect } from "react";
+import "./page.css";
+import Input from "./Input";
 
 export default function Home() {
-  return (
-    <div className={styles.page}>
-      <main className={styles.main}>
-        <Image
-          className={styles.logo}
-          src="/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol>
-          <li>
-            Get started by editing <code>src/app/page.js</code>.
-          </li>
-          <li>Save and see your changes instantly.</li>
-        </ol>
+  const firstInputRef = useRef(null);
+  const secondInputRef = useRef(null);
+  const thirdInputRef = useRef(null);
+  const forthInputRef = useRef(null);
+  const fifthInputRef = useRef(null);
 
-        <div className={styles.ctas}>
-          <a
-            className={styles.primary}
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className={styles.logo}
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
-            />
-            Deploy now
-          </a>
-          <a
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-            className={styles.secondary}
-          >
-            Read our docs
-          </a>
-        </div>
-      </main>
-      <footer className={styles.footer}>
-        <a
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
+  const [inputContent, setInputContent] = useState({
+    first: "",
+    second: "",
+    third: "",
+    forth: "",
+    fifth: "",
+  });
+
+  const [isDisabled, setIsDisabled] = useState(true);
+  const [fetchError, setFetchError] = useState(null);
+
+  // Changing input content
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    setInputContent((prevInputContent) => ({
+      ...prevInputContent,
+      [name]: value,
+    }));
+  };
+
+  // Submit check input
+
+  const handleSubmitCheckInput = async (e) => {
+    e.preventDefault();
+    let joindInputsValues = Object.values(inputContent).join("");
+    console.log(joindInputsValues);
+  
+    const API_URL = `https://api.dictionaryapi.dev/api/v2/entries/en/${joindInputsValues}`;
+  
+    try {
+      const response = await fetch(API_URL);
+      if (!response.ok) {
+        throw new Error("Network response was not ok");
+      }
+      const listWords = await response.json();
+      console.log(listWords);
+      setInputContent(listWords); 
+      setFetchError(null); 
+    } catch (error) {
+      console.error("Error fetching word:", error);
+      setFetchError(error.message); 
+    }
+  };
+
+
+
+// let joindInputsValues = Object.values(inputContent).join("")
+//   console.log(joindInputsValues);
+
+
+//   const API_URL = `https://api.dictionaryapi.dev/api/v2/entries/en/${joindInputsValues}`;
+
+//   useEffect(() => {
+//     const fetchWord = async() =>{
+//       try {
+//         const response = await fetch(API_URL);
+//         if(!response.ok) {
+//           throw new Error("Network response was not ok");
+//         }
+//         const listWords = await response.json();
+//         console.log(listWords);
+//         setInputContent(listWords);
+//         setFetchError(null);
+//       } catch(error) {
+//         console.error("Error fetching word:", error);
+//         setFetchError(error);
+//       }
+//     }
+//     fetchWord();
+//   }, [])
+
+
+
+  return (
+    <div className="page_main">
+      <div className="page_textsContainer">
+        <h1 className="page_hedline">Word Checking game</h1>
+        <p className="page_instructions">Enter a 5 letter word and click "Enter" to check if it exists</p>
+      </div>
+      <div className="page_buttonContainer">
+        <button className="page_button" onClick={handleSubmitCheckInput}>
+          CHECK WORD
+        </button>
+      </div>
+      <div className="page_inputsContainer">
+        <form className="page_form" onSubmit={handleSubmitCheckInput}>
+          <Input
+            value={inputContent}
+            onChange={handleInputChange}
+            refs={{
+              first: firstInputRef,
+              second: secondInputRef,
+              third: thirdInputRef,
+              forth: forthInputRef,
+              fifth: fifthInputRef,
+            }}
           />
-          Learn
-        </a>
-        <a
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
-      </footer>
+        </form>
+      </div>
+      <div className="page_informationContainer">
+        <d className="page_information">Let's go!</d>
+        {fetchError && <p className="page_errorMessage">{`Oops: ${fetchError}`}</p>}
+        {/* <div>{inputContent.map((content) => (
+          <d></d>
+        ))}</div> */}
+      </div>
     </div>
   );
 }

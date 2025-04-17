@@ -1,0 +1,47 @@
+export const inputs = [
+    {
+        name:"first", 
+        maxLength: 1, 
+        minLength: 1, 
+        value:{}, 
+        onChange:{},
+        // disabled={isDisabled},
+        ref:{},  
+    }, 
+    {
+        name:"second", 
+        maxLength: 1, 
+        minLength: 1, 
+        value:{}, 
+        onChange:{},
+        // disabled={isDisabled},
+        ref:{},  
+    },
+    {
+        name:"third", 
+        maxLength: 1, 
+        minLength: 1, 
+        value:{}, 
+        onChange:{},
+        // disabled={isDisabled},
+        ref:{},  
+    },
+    {
+        name:"forth", 
+        maxLength: 1, 
+        minLength: 1, 
+        value:{}, 
+        onChange:{},
+        // disabled={isDisabled},
+        ref:{},  
+    },
+    {
+        name:"fifth", 
+        maxLength: 1, 
+        minLength: 1, 
+        value:{}, 
+        onChange:{},
+        // disabled={isDisabled},
+        ref:{},  
+    }
+]
