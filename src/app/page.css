@@ -72,4 +72,11 @@
     color: rgb(153, 10, 172);
 }
 
+.page_error {
+    border-color: red;
+}
+
+.page_input {
+    border-color: green;
+}
 

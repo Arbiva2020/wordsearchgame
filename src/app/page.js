@@ -22,6 +22,7 @@ export default function Home() {
   const [fetchError, setFetchError] = useState(null);
   const [defenition, setDefenition] = useState("");
 
+
   // Changing input content
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -34,8 +35,10 @@ export default function Home() {
 
   const handleSubmitCheckInput = async (e) => {
     e.preventDefault();
+    let inputValues = Object.values(inputContent)
     let joindInputsValues = Object.values(inputContent).join("");
     console.log(joindInputsValues);
+    console.log(inputValues)
   
     const API_URL = `https://api.dictionaryapi.dev/api/v2/entries/en/${joindInputsValues}`;
   
@@ -56,6 +59,22 @@ export default function Home() {
       setFetchError(error.message); 
     }
   };
+
+
+  let optionalWords = [];
+  const alphabet = "abcdefghijklmnopqrstuvwxyz";
+  const randomeStringIndex = Math.floor(Math.random(0, 5)*5);
+  console.log(randomeStringIndex)
+  // console.log(inputValues)
+    function spellCheck(input){
+  if (!response.ok) {
+    inputValues[i] = inputValues[i].replace(inputContent[i], randomLetter);
+    }
+    //for every word checked (after clicking the button) - if an error arises we subsititute every letter with a random letter by turn
+    // and check if the new word is valid. if it is, we will add it to the "optionalWords" array. once we finish checking all the letters, we will return the array.
+    // this array will be used to display the alternatives for the user. 
+      return regex.test(input);   
+    }
 
 
 
@@ -100,6 +119,7 @@ export default function Home() {
       <div className="page_inputsContainer">
         <form className="page_form" onSubmit={handleSubmitCheckInput}>
           <Input
+            style={fetchError? {borderColor:"red"} : {borderColor:"green"}}
             value={inputContent}
             onChange={handleInputChange}
             refs={{
@@ -113,13 +133,15 @@ export default function Home() {
         </form>
       </div>
       <div className="page_informationContainer">
-        <d className="page_information">Let's go!</d>
-        {fetchError && <p className="page_errorMessage">{`Oops: ${fetchError}`}</p>}
-        {/* <div>{inputContent.map((content) => (
-          <d></d>
-        ))}</div> */}
+        {inputContent ? <p className="page_information">Start</p> : <p className="page_information">Let's Go!</p>}
+        {fetchError && <p className="page_errorMessage">{`Oops: ${fetchError}. Maybe you ment:`}</p>}
+        <div className="page_alternativeWords">
+
+        </div>
+       
+       
         <div className="page_word_defenition">
-          <h3 className="page_defenitionHedline">Defenition:</h3>
+          <h3 className="page_defenitionHedline">Get Defenition</h3>
           <p>{fetchError || `The above word possible deffinition might be:${defenition}`}</p>
         </div>
       </div>
