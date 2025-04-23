@@ -2,7 +2,7 @@ import React from 'react'
 import "./Input.css"
 import { inputs } from './inputData.js'
 
-function Input({value, onChange, refs, onKeyDown, style}) {
+function Input({value, onChange, refs, onKeyDown, style, name, key }) {
 
   return (
     <div className='page_inputContainer'>

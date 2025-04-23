@@ -2,6 +2,7 @@
 import { useState, useRef, useEffect } from "react";
 import "./page.css";
 import Input from "./Input";
+import "./part1.js";
 
 export default function Home() {
   const firstInputRef = useRef(null);
@@ -35,10 +36,10 @@ export default function Home() {
 
   const handleSubmitCheckInput = async (e) => {
     e.preventDefault();
-    let inputValues = Object.values(inputContent)
+    let inputValues = Object.values(inputContent);
     let joindInputsValues = Object.values(inputContent).join("");
     console.log(joindInputsValues);
-    console.log(inputValues)
+    console.log(inputValues);
   
     const API_URL = `https://api.dictionaryapi.dev/api/v2/entries/en/${joindInputsValues}`;
   
@@ -59,6 +60,13 @@ export default function Home() {
       setFetchError(error.message); 
     }
   };
+
+
+  const onKeyDown = (e) => {
+    if (e.key === "Enter") {
+      handleSubmitCheckInput(e)
+    }
+  }
 
 
   let optionalWords = [];
@@ -103,6 +111,12 @@ export default function Home() {
 //     fetchWord();
 //   }, [])
 
+const handleborderstyle = () => {
+  return {
+    borderColor: `2px solid ${fetchError ? "red" : !fetchError ? "green" : "black"}`,
+  }
+}
+
 
 
   return (
@@ -117,9 +131,11 @@ export default function Home() {
         </button>
       </div>
       <div className="page_inputsContainer">
-        <form className="page_form" onSubmit={handleSubmitCheckInput}>
+        <form className="page_form" onSubmit={handleSubmitCheckInput} onKeyDown={onKeyDown}>
           <Input
-            style={fetchError? {borderColor:"red"} : {borderColor:"green"}}
+            className="page_input"
+            style={fetchError ? {borderColor:"red"} : {borderColor:"green"}}
+          // style ={{borderColor: !fetchError ? "green" : "red"}}
             value={inputContent}
             onChange={handleInputChange}
             refs={{
